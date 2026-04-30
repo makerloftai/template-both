@@ -1,5 +1,6 @@
 <?php
 
+use App\Support\MakerLoftErrorReporter;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -27,5 +28,11 @@ return Application::configure(basePath: dirname(__DIR__))
         });
     })
     ->withExceptions(function (Exceptions $exceptions): void {
-        //
+        // Forward every unhandled exception to the MakerLoft dashboard's
+        // error-ingest webhook. No-ops silently when the env vars are
+        // unset (e.g. local dev or a fork deployed outside MakerLoft's
+        // orchestration), so this is safe to ship in every starter.
+        $exceptions->report(function (Throwable $e): void {
+            MakerLoftErrorReporter::report($e);
+        });
     })->create();
