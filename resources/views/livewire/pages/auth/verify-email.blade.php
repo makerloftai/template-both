@@ -35,24 +35,27 @@ new #[Layout('layouts.guest')] class extends Component
     }
 }; ?>
 
-<div>
-    <div class="mb-4 text-sm text-gray-600 dark:text-gray-400">
-        {{ __('Thanks for signing up! Before getting started, could you verify your email address by clicking on the link we just emailed to you? If you didn\'t receive the email, we will gladly send you another.') }}
+<div class="flex flex-col gap-6">
+    <div class="flex flex-col gap-2 text-center">
+        <flux:heading size="lg">{{ __('Verify your email') }}</flux:heading>
+        <flux:subheading>
+            {{ __('Thanks for signing up! Before getting started, could you verify your email address by clicking on the link we just emailed to you? If you didn\'t receive the email, we will gladly send you another.') }}
+        </flux:subheading>
     </div>
 
-    @if (session('status') == 'verification-link-sent')
-        <div class="mb-4 font-medium text-sm text-green-600 dark:text-green-400">
+    @if (session('status') === 'verification-link-sent')
+        <flux:callout color="emerald" icon="check-circle" inline>
             {{ __('A new verification link has been sent to the email address you provided during registration.') }}
-        </div>
+        </flux:callout>
     @endif
 
-    <div class="mt-4 flex items-center justify-between">
-        <x-primary-button wire:click="sendVerification">
+    <div class="flex items-center justify-between gap-4">
+        <flux:button wire:click="sendVerification" variant="primary">
             {{ __('Resend Verification Email') }}
-        </x-primary-button>
+        </flux:button>
 
-        <button wire:click="logout" type="submit" class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800">
-            {{ __('Log Out') }}
-        </button>
+        <flux:button wire:click="logout" variant="ghost">
+            {{ __('Log out') }}
+        </flux:button>
     </div>
 </div>

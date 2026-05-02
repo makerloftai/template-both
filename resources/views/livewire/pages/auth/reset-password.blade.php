@@ -39,9 +39,6 @@ new #[Layout('layouts.guest')] class extends Component
             'password' => ['required', 'string', 'confirmed', Rules\Password::defaults()],
         ]);
 
-        // Here we will attempt to reset the user's password. If it is successful we
-        // will update the password on an actual user model and persist it to the
-        // database. Otherwise we will parse the error and return the response.
         $status = Password::reset(
             $this->only('email', 'password', 'password_confirmation', 'token'),
             function ($user) {
@@ -54,9 +51,6 @@ new #[Layout('layouts.guest')] class extends Component
             }
         );
 
-        // If the password was successfully reset, we will redirect the user back to
-        // the application's home authenticated view. If there is an error we can
-        // redirect them back to where they came from with their error message.
         if ($status != Password::PASSWORD_RESET) {
             $this->addError('email', __($status));
 
@@ -69,37 +63,42 @@ new #[Layout('layouts.guest')] class extends Component
     }
 }; ?>
 
-<div>
-    <form wire:submit="resetPassword">
-        <!-- Email Address -->
-        <div>
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input wire:model="email" id="email" class="block mt-1 w-full" type="email" name="email" required autofocus autocomplete="username" />
-            <x-input-error :messages="$errors->get('email')" class="mt-2" />
-        </div>
+<div class="flex flex-col gap-6">
+    <div class="flex flex-col gap-2 text-center">
+        <flux:heading size="lg">{{ __('Reset your password') }}</flux:heading>
+        <flux:subheading>{{ __('Enter your new password below.') }}</flux:subheading>
+    </div>
 
-        <!-- Password -->
-        <div class="mt-4">
-            <x-input-label for="password" :value="__('Password')" />
-            <x-text-input wire:model="password" id="password" class="block mt-1 w-full" type="password" name="password" required autocomplete="new-password" />
-            <x-input-error :messages="$errors->get('password')" class="mt-2" />
-        </div>
+    <form wire:submit="resetPassword" class="flex flex-col gap-4">
+        <flux:input
+            wire:model="email"
+            :label="__('Email')"
+            type="email"
+            required
+            autofocus
+            autocomplete="username"
+        />
 
-        <!-- Confirm Password -->
-        <div class="mt-4">
-            <x-input-label for="password_confirmation" :value="__('Confirm Password')" />
+        <flux:input
+            wire:model="password"
+            :label="__('Password')"
+            type="password"
+            required
+            autocomplete="new-password"
+            viewable
+        />
 
-            <x-text-input wire:model="password_confirmation" id="password_confirmation" class="block mt-1 w-full"
-                          type="password"
-                          name="password_confirmation" required autocomplete="new-password" />
+        <flux:input
+            wire:model="password_confirmation"
+            :label="__('Confirm Password')"
+            type="password"
+            required
+            autocomplete="new-password"
+            viewable
+        />
 
-            <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
-        </div>
-
-        <div class="flex items-center justify-end mt-4">
-            <x-primary-button>
-                {{ __('Reset Password') }}
-            </x-primary-button>
-        </div>
+        <flux:button type="submit" variant="primary" class="w-full">
+            {{ __('Reset Password') }}
+        </flux:button>
     </form>
 </div>

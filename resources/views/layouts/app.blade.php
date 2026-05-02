@@ -13,24 +13,34 @@
 
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
-    </head>
-    <body class="font-sans antialiased">
-        <div class="min-h-screen bg-gray-100 dark:bg-gray-900">
-            <livewire:layout.navigation />
 
-            <!-- Page Heading -->
+        @fluxAppearance
+    </head>
+    <body class="font-sans antialiased min-h-screen bg-white dark:bg-zinc-900">
+        <flux:header container class="bg-white dark:bg-zinc-900 border-b border-zinc-200 dark:border-zinc-700">
+            <a href="{{ route('dashboard') }}" wire:navigate class="flex items-center gap-2">
+                <x-application-logo class="h-8 w-auto fill-current text-zinc-800 dark:text-zinc-200" />
+            </a>
+
+            <flux:navbar class="ms-8 me-auto">
+                <flux:navbar.item :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>
+                    {{ __('Dashboard') }}
+                </flux:navbar.item>
+            </flux:navbar>
+
+            <livewire:layout.navigation />
+        </flux:header>
+
+        <flux:main container>
             @if (isset($header))
-                <header class="bg-white dark:bg-gray-800 shadow">
-                    <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-                        {{ $header }}
-                    </div>
+                <header class="mb-6">
+                    {{ $header }}
                 </header>
             @endif
 
-            <!-- Page Content -->
-            <main>
-                {{ $slot }}
-            </main>
-        </div>
+            {{ $slot }}
+        </flux:main>
+
+        @fluxScripts
     </body>
 </html>
