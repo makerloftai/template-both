@@ -38,54 +38,41 @@ new #[Layout('layouts.guest')] class extends Component
 
 <div class="flex flex-col gap-6">
     <div class="flex flex-col gap-2 text-center">
-        <flux:heading size="lg">{{ __('Create an account') }}</flux:heading>
-        <flux:subheading>{{ __('Enter your details below to create your account') }}</flux:subheading>
+        <h2 class="text-xl font-semibold">{{ __('Create an account') }}</h2>
+        <p class="text-sm text-base-content/70">{{ __('Enter your details below to create your account') }}</p>
     </div>
 
     <form wire:submit="register" class="flex flex-col gap-4">
-        <flux:input
-            wire:model="name"
-            :label="__('Name')"
-            type="text"
-            required
-            autofocus
-            autocomplete="name"
-        />
+        <label class="form-control w-full">
+            <span class="label-text">{{ __('Name') }}</span>
+            <input type="text" wire:model="name" class="input input-bordered w-full" required autofocus autocomplete="name" />
+            @error('name')<span class="text-error text-sm mt-1">{{ $message }}</span>@enderror
+        </label>
 
-        <flux:input
-            wire:model="email"
-            :label="__('Email')"
-            type="email"
-            required
-            autocomplete="username"
-            placeholder="email@example.com"
-        />
+        <label class="form-control w-full">
+            <span class="label-text">{{ __('Email') }}</span>
+            <input type="email" wire:model="email" class="input input-bordered w-full" required autocomplete="username" placeholder="email@example.com" />
+            @error('email')<span class="text-error text-sm mt-1">{{ $message }}</span>@enderror
+        </label>
 
-        <flux:input
-            wire:model="password"
-            :label="__('Password')"
-            type="password"
-            required
-            autocomplete="new-password"
-            viewable
-        />
+        <label class="form-control w-full">
+            <span class="label-text">{{ __('Password') }}</span>
+            <input type="password" wire:model="password" class="input input-bordered w-full" required autocomplete="new-password" />
+            @error('password')<span class="text-error text-sm mt-1">{{ $message }}</span>@enderror
+        </label>
 
-        <flux:input
-            wire:model="password_confirmation"
-            :label="__('Confirm Password')"
-            type="password"
-            required
-            autocomplete="new-password"
-            viewable
-        />
+        <label class="form-control w-full">
+            <span class="label-text">{{ __('Confirm Password') }}</span>
+            <input type="password" wire:model="password_confirmation" class="input input-bordered w-full" required autocomplete="new-password" />
+        </label>
 
-        <flux:button type="submit" variant="primary" class="w-full">
+        <button type="submit" class="btn btn-primary w-full" wire:loading.attr="disabled">
             {{ __('Register') }}
-        </flux:button>
+        </button>
     </form>
 
-    <div class="text-center text-sm text-zinc-600 dark:text-zinc-400">
+    <div class="text-center text-sm text-base-content/70">
         {{ __('Already have an account?') }}
-        <flux:link href="{{ route('login') }}" wire:navigate>{{ __('Log in') }}</flux:link>
+        <a href="{{ route('login') }}" wire:navigate class="link">{{ __('Log in') }}</a>
     </div>
 </div>

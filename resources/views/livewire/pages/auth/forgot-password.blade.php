@@ -35,34 +35,31 @@ new #[Layout('layouts.guest')] class extends Component
 
 <div class="flex flex-col gap-6">
     <div class="flex flex-col gap-2 text-center">
-        <flux:heading size="lg">{{ __('Forgot your password?') }}</flux:heading>
-        <flux:subheading>
+        <h2 class="text-xl font-semibold">{{ __('Forgot your password?') }}</h2>
+        <p class="text-sm text-base-content/70">
             {{ __('No problem. Just let us know your email address and we will email you a password reset link.') }}
-        </flux:subheading>
+        </p>
     </div>
 
     @if (session('status'))
-        <flux:callout color="emerald" icon="check-circle" inline>
-            {{ session('status') }}
-        </flux:callout>
+        <div role="alert" class="alert alert-success">
+            <span>{{ session('status') }}</span>
+        </div>
     @endif
 
     <form wire:submit="sendPasswordResetLink" class="flex flex-col gap-4">
-        <flux:input
-            wire:model="email"
-            :label="__('Email')"
-            type="email"
-            required
-            autofocus
-            placeholder="email@example.com"
-        />
+        <label class="form-control w-full">
+            <span class="label-text">{{ __('Email') }}</span>
+            <input type="email" wire:model="email" class="input input-bordered w-full" required autofocus placeholder="email@example.com" />
+            @error('email')<span class="text-error text-sm mt-1">{{ $message }}</span>@enderror
+        </label>
 
-        <flux:button type="submit" variant="primary" class="w-full">
+        <button type="submit" class="btn btn-primary w-full" wire:loading.attr="disabled">
             {{ __('Email Password Reset Link') }}
-        </flux:button>
+        </button>
     </form>
 
-    <div class="text-center text-sm text-zinc-600 dark:text-zinc-400">
-        <flux:link href="{{ route('login') }}" wire:navigate>{{ __('Back to login') }}</flux:link>
+    <div class="text-center text-sm text-base-content/70">
+        <a href="{{ route('login') }}" wire:navigate class="link">{{ __('Back to login') }}</a>
     </div>
 </div>

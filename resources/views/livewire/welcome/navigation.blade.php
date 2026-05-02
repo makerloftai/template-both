@@ -1,11 +1,11 @@
 <nav class="flex flex-1 justify-end gap-2">
     @auth
-        <flux:button :href="url('/dashboard')" variant="ghost">{{ __('Dashboard') }}</flux:button>
+        <a href="{{ url('/dashboard') }}" wire:navigate class="btn btn-ghost">{{ __('Dashboard') }}</a>
     @else
-        <flux:button :href="route('login')" variant="ghost">{{ __('Log in') }}</flux:button>
+        <a href="{{ route('login') }}" wire:navigate class="btn btn-ghost">{{ __('Log in') }}</a>
 
         @if (Route::has('register'))
-            <flux:button :href="route('register')" variant="primary">{{ __('Register') }}</flux:button>
+            <a href="{{ route('register') }}" wire:navigate class="btn btn-primary">{{ __('Register') }}</a>
         @endif
     @endauth
 </nav>

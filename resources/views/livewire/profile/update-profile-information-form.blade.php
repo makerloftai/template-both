@@ -64,47 +64,44 @@ new class extends Component
 
 <section>
     <header class="mb-6">
-        <flux:heading size="lg">{{ __('Profile Information') }}</flux:heading>
-        <flux:subheading>{{ __("Update your account's profile information and email address.") }}</flux:subheading>
+        <h2 class="text-lg font-semibold">{{ __('Profile Information') }}</h2>
+        <p class="text-sm text-base-content/70">{{ __("Update your account's profile information and email address.") }}</p>
     </header>
 
     <form wire:submit="updateProfileInformation" class="flex flex-col gap-4">
-        <flux:input
-            wire:model="name"
-            :label="__('Name')"
-            type="text"
-            required
-            autofocus
-            autocomplete="name"
-        />
+        <label class="form-control w-full">
+            <span class="label-text">{{ __('Name') }}</span>
+            <input type="text" wire:model="name" class="input input-bordered w-full" required autofocus autocomplete="name" />
+            @error('name')<span class="text-error text-sm mt-1">{{ $message }}</span>@enderror
+        </label>
 
-        <flux:input
-            wire:model="email"
-            :label="__('Email')"
-            type="email"
-            required
-            autocomplete="username"
-        />
+        <label class="form-control w-full">
+            <span class="label-text">{{ __('Email') }}</span>
+            <input type="email" wire:model="email" class="input input-bordered w-full" required autocomplete="username" />
+            @error('email')<span class="text-error text-sm mt-1">{{ $message }}</span>@enderror
+        </label>
 
         @if (auth()->user() instanceof \Illuminate\Contracts\Auth\MustVerifyEmail && ! auth()->user()->hasVerifiedEmail())
-            <flux:callout color="amber" icon="exclamation-triangle" inline>
-                {{ __('Your email address is unverified.') }}
-                <flux:link wire:click.prevent="sendVerification">{{ __('Click here to re-send the verification email.') }}</flux:link>
-            </flux:callout>
+            <div role="alert" class="alert alert-warning">
+                <span>
+                    {{ __('Your email address is unverified.') }}
+                    <button type="button" wire:click.prevent="sendVerification" class="link">{{ __('Click here to re-send the verification email.') }}</button>
+                </span>
+            </div>
 
             @if (session('status') === 'verification-link-sent')
-                <flux:callout color="emerald" icon="check-circle" inline>
-                    {{ __('A new verification link has been sent to your email address.') }}
-                </flux:callout>
+                <div role="alert" class="alert alert-success">
+                    <span>{{ __('A new verification link has been sent to your email address.') }}</span>
+                </div>
             @endif
         @endif
 
         <div class="flex items-center gap-4">
-            <flux:button type="submit" variant="primary">{{ __('Save') }}</flux:button>
+            <button type="submit" class="btn btn-primary" wire:loading.attr="disabled">{{ __('Save') }}</button>
 
-            <flux:text x-data="{ shown: false }" x-init="$wire.on('profile-updated', () => { shown = true; setTimeout(() => shown = false, 2000); })" x-show="shown" x-transition class="text-emerald-600 dark:text-emerald-400">
+            <span x-data="{ shown: false }" x-init="$wire.on('profile-updated', () => { shown = true; setTimeout(() => shown = false, 2000); })" x-show="shown" x-cloak x-transition class="text-success text-sm">
                 {{ __('Saved.') }}
-            </flux:text>
+            </span>
         </div>
     </form>
 </section>

@@ -23,42 +23,37 @@ new class extends Component
     }
 }; ?>
 
-<section>
+<section x-data="{ open: false }" @keydown.escape.window="open && (open = false)">
     <header class="mb-6">
-        <flux:heading size="lg">{{ __('Delete Account') }}</flux:heading>
-        <flux:subheading>
+        <h2 class="text-lg font-semibold">{{ __('Delete Account') }}</h2>
+        <p class="text-sm text-base-content/70">
             {{ __('Once your account is deleted, all of its resources and data will be permanently deleted. Before deleting your account, please download any data or information that you wish to retain.') }}
-        </flux:subheading>
+        </p>
     </header>
 
-    <flux:modal.trigger name="confirm-user-deletion">
-        <flux:button variant="danger">{{ __('Delete Account') }}</flux:button>
-    </flux:modal.trigger>
+    <button type="button" class="btn btn-error" x-ref="trigger" @click="open = true">
+        {{ __('Delete Account') }}
+    </button>
 
-    <flux:modal name="confirm-user-deletion" class="md:w-96">
-        <form wire:submit="deleteUser" class="flex flex-col gap-4">
-            <div>
-                <flux:heading size="lg">{{ __('Are you sure you want to delete your account?') }}</flux:heading>
-                <flux:subheading>
-                    {{ __('Once your account is deleted, all of its resources and data will be permanently deleted. Please enter your password to confirm.') }}
-                </flux:subheading>
-            </div>
+    <dialog class="modal" :class="{ 'modal-open': open }" @click.self="open = false">
+        <div class="modal-box">
+            <h3 class="text-lg font-semibold">{{ __('Are you sure you want to delete your account?') }}</h3>
+            <p class="py-2 text-sm text-base-content/70">
+                {{ __('Once your account is deleted, all of its resources and data will be permanently deleted. Please enter your password to confirm.') }}
+            </p>
 
-            <flux:input
-                wire:model="password"
-                :label="__('Password')"
-                type="password"
-                :placeholder="__('Password')"
-                viewable
-            />
+            <form wire:submit="deleteUser" class="flex flex-col gap-3">
+                <label class="form-control w-full">
+                    <span class="label-text">{{ __('Password') }}</span>
+                    <input type="password" wire:model="password" class="input input-bordered w-full" placeholder="{{ __('Password') }}" />
+                    @error('password')<span class="text-error text-sm mt-1">{{ $message }}</span>@enderror
+                </label>
 
-            <div class="flex items-center justify-end gap-2">
-                <flux:modal.close>
-                    <flux:button variant="ghost">{{ __('Cancel') }}</flux:button>
-                </flux:modal.close>
-
-                <flux:button type="submit" variant="danger">{{ __('Delete Account') }}</flux:button>
-            </div>
-        </form>
-    </flux:modal>
+                <div class="modal-action">
+                    <button type="button" class="btn btn-ghost" @click="open = false">{{ __('Cancel') }}</button>
+                    <button type="submit" class="btn btn-error" wire:loading.attr="disabled">{{ __('Delete Account') }}</button>
+                </div>
+            </form>
+        </div>
+    </dialog>
 </section>

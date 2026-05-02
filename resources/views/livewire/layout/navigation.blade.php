@@ -34,18 +34,45 @@ new class extends Component
     }
 }; ?>
 
-<flux:dropdown align="end">
-    <flux:profile :name="$name" />
+<div
+    class="dropdown dropdown-end"
+    x-data="{ open: false }"
+    @click.outside="open = false"
+    @keydown.escape.window="open && (open = false, $refs.trigger.focus())"
+>
+    <button
+        type="button"
+        class="btn btn-ghost rounded-btn"
+        x-ref="trigger"
+        @click="open = !open"
+        :aria-expanded="open"
+        aria-haspopup="menu"
+    >
+        <div class="avatar placeholder">
+            <div class="bg-neutral text-neutral-content w-8 rounded-full">
+                <span class="text-sm">{{ mb_strtoupper(mb_substr($name, 0, 1)) ?: '?' }}</span>
+            </div>
+        </div>
+        <span class="hidden sm:inline ms-2">{{ $name }}</span>
+    </button>
 
-    <flux:menu>
-        <flux:menu.item icon="user" href="{{ route('profile') }}" wire:navigate>
-            {{ __('Profile') }}
-        </flux:menu.item>
-
-        <flux:menu.separator />
-
-        <flux:menu.item icon="arrow-right-start-on-rectangle" wire:click="logout" variant="danger">
-            {{ __('Log out') }}
-        </flux:menu.item>
-    </flux:menu>
-</flux:dropdown>
+    <ul
+        class="menu dropdown-content bg-base-100 border border-base-300 rounded-box shadow z-10 mt-2 w-52 p-2"
+        role="menu"
+        x-show="open"
+        x-cloak
+        x-transition.opacity.duration.150ms
+    >
+        <li>
+            <a href="{{ route('profile') }}" wire:navigate role="menuitem">
+                {{ __('Profile') }}
+            </a>
+        </li>
+        <li><div class="divider my-0"></div></li>
+        <li>
+            <button type="button" wire:click="logout" role="menuitem" class="text-error w-full text-left">
+                {{ __('Log out') }}
+            </button>
+        </li>
+    </ul>
+</div>

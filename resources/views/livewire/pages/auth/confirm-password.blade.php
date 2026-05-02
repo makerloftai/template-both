@@ -35,24 +35,21 @@ new #[Layout('layouts.guest')] class extends Component
 
 <div class="flex flex-col gap-6">
     <div class="flex flex-col gap-2 text-center">
-        <flux:heading size="lg">{{ __('Confirm your password') }}</flux:heading>
-        <flux:subheading>
+        <h2 class="text-xl font-semibold">{{ __('Confirm your password') }}</h2>
+        <p class="text-sm text-base-content/70">
             {{ __('This is a secure area of the application. Please confirm your password before continuing.') }}
-        </flux:subheading>
+        </p>
     </div>
 
     <form wire:submit="confirmPassword" class="flex flex-col gap-4">
-        <flux:input
-            wire:model="password"
-            :label="__('Password')"
-            type="password"
-            required
-            autocomplete="current-password"
-            viewable
-        />
+        <label class="form-control w-full">
+            <span class="label-text">{{ __('Password') }}</span>
+            <input type="password" wire:model="password" class="input input-bordered w-full" required autocomplete="current-password" />
+            @error('password')<span class="text-error text-sm mt-1">{{ $message }}</span>@enderror
+        </label>
 
-        <flux:button type="submit" variant="primary" class="w-full">
+        <button type="submit" class="btn btn-primary w-full" wire:loading.attr="disabled">
             {{ __('Confirm') }}
-        </flux:button>
+        </button>
     </form>
 </div>

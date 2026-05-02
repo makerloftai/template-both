@@ -40,41 +40,34 @@ new class extends Component
 
 <section>
     <header class="mb-6">
-        <flux:heading size="lg">{{ __('Update Password') }}</flux:heading>
-        <flux:subheading>{{ __('Ensure your account is using a long, random password to stay secure.') }}</flux:subheading>
+        <h2 class="text-lg font-semibold">{{ __('Update Password') }}</h2>
+        <p class="text-sm text-base-content/70">{{ __('Ensure your account is using a long, random password to stay secure.') }}</p>
     </header>
 
     <form wire:submit="updatePassword" class="flex flex-col gap-4">
-        <flux:input
-            wire:model="current_password"
-            :label="__('Current Password')"
-            type="password"
-            autocomplete="current-password"
-            viewable
-        />
+        <label class="form-control w-full">
+            <span class="label-text">{{ __('Current Password') }}</span>
+            <input type="password" wire:model="current_password" class="input input-bordered w-full" autocomplete="current-password" />
+            @error('current_password')<span class="text-error text-sm mt-1">{{ $message }}</span>@enderror
+        </label>
 
-        <flux:input
-            wire:model="password"
-            :label="__('New Password')"
-            type="password"
-            autocomplete="new-password"
-            viewable
-        />
+        <label class="form-control w-full">
+            <span class="label-text">{{ __('New Password') }}</span>
+            <input type="password" wire:model="password" class="input input-bordered w-full" autocomplete="new-password" />
+            @error('password')<span class="text-error text-sm mt-1">{{ $message }}</span>@enderror
+        </label>
 
-        <flux:input
-            wire:model="password_confirmation"
-            :label="__('Confirm Password')"
-            type="password"
-            autocomplete="new-password"
-            viewable
-        />
+        <label class="form-control w-full">
+            <span class="label-text">{{ __('Confirm Password') }}</span>
+            <input type="password" wire:model="password_confirmation" class="input input-bordered w-full" autocomplete="new-password" />
+        </label>
 
         <div class="flex items-center gap-4">
-            <flux:button type="submit" variant="primary">{{ __('Save') }}</flux:button>
+            <button type="submit" class="btn btn-primary" wire:loading.attr="disabled">{{ __('Save') }}</button>
 
-            <flux:text x-data="{ shown: false }" x-init="$wire.on('password-updated', () => { shown = true; setTimeout(() => shown = false, 2000); })" x-show="shown" x-transition class="text-emerald-600 dark:text-emerald-400">
+            <span x-data="{ shown: false }" x-init="$wire.on('password-updated', () => { shown = true; setTimeout(() => shown = false, 2000); })" x-show="shown" x-cloak x-transition class="text-success text-sm">
                 {{ __('Saved.') }}
-            </flux:text>
+            </span>
         </div>
     </form>
 </section>

@@ -37,25 +37,25 @@ new #[Layout('layouts.guest')] class extends Component
 
 <div class="flex flex-col gap-6">
     <div class="flex flex-col gap-2 text-center">
-        <flux:heading size="lg">{{ __('Verify your email') }}</flux:heading>
-        <flux:subheading>
+        <h2 class="text-xl font-semibold">{{ __('Verify your email') }}</h2>
+        <p class="text-sm text-base-content/70">
             {{ __('Thanks for signing up! Before getting started, could you verify your email address by clicking on the link we just emailed to you? If you didn\'t receive the email, we will gladly send you another.') }}
-        </flux:subheading>
+        </p>
     </div>
 
     @if (session('status') === 'verification-link-sent')
-        <flux:callout color="emerald" icon="check-circle" inline>
-            {{ __('A new verification link has been sent to the email address you provided during registration.') }}
-        </flux:callout>
+        <div role="alert" class="alert alert-success">
+            <span>{{ __('A new verification link has been sent to the email address you provided during registration.') }}</span>
+        </div>
     @endif
 
     <div class="flex items-center justify-between gap-4">
-        <flux:button wire:click="sendVerification" variant="primary">
+        <button type="button" wire:click="sendVerification" class="btn btn-primary" wire:loading.attr="disabled">
             {{ __('Resend Verification Email') }}
-        </flux:button>
+        </button>
 
-        <flux:button wire:click="logout" variant="ghost">
+        <button type="button" wire:click="logout" class="btn btn-ghost">
             {{ __('Log out') }}
-        </flux:button>
+        </button>
     </div>
 </div>

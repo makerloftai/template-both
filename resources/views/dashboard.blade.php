@@ -1,11 +1,13 @@
 <x-app-layout>
     <x-slot name="header">
-        <flux:heading size="xl">{{ __('Dashboard') }}</flux:heading>
+        <h1 class="text-2xl font-semibold">{{ __('Dashboard') }}</h1>
     </x-slot>
 
     <div class="mx-auto max-w-7xl py-6">
-        <div class="rounded-lg border border-zinc-200 bg-white p-6 dark:border-zinc-700 dark:bg-zinc-800">
-            <flux:text>{{ __("You're logged in!") }}</flux:text>
+        <div class="card bg-base-100 border border-base-300">
+            <div class="card-body">
+                <p>{{ __("You're logged in!") }}</p>
+            </div>
         </div>
     </div>
 </x-app-layout>

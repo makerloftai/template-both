@@ -7,26 +7,32 @@
 
         <title>{{ config('app.name', 'Laravel') }}</title>
 
+        <script>
+            (() => {
+                const stored = localStorage.getItem('theme');
+                const dark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                document.documentElement.dataset.theme = stored ?? (dark ? 'dark' : 'light');
+            })();
+        </script>
+
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
 
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
-
-        @fluxAppearance
     </head>
-    <body class="font-sans antialiased min-h-screen bg-white dark:bg-zinc-900">
+    <body class="font-sans antialiased min-h-screen bg-base-100 text-base-content">
         <div class="flex min-h-screen flex-col items-center justify-center px-4 py-8">
             <a href="/" wire:navigate class="mb-6">
-                <x-application-logo class="h-12 w-auto fill-current text-zinc-500" />
+                <x-application-logo class="h-12 w-auto fill-current" />
             </a>
 
-            <div class="w-full sm:max-w-md rounded-lg border border-zinc-200 bg-white p-6 shadow-sm dark:border-zinc-700 dark:bg-zinc-800">
-                {{ $slot }}
+            <div class="card bg-base-100 border border-base-300 shadow-sm w-full sm:max-w-md">
+                <div class="card-body">
+                    {{ $slot }}
+                </div>
             </div>
         </div>
-
-        @fluxScripts
     </body>
 </html>
