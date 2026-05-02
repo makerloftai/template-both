@@ -19,6 +19,15 @@ jobs:
   update:
     runs-on: ubuntu-latest
     timeout-minutes: 5
+    # Skip on the very first push to a new ref. For generated user
+    # apps that's the template-applied initial commit; the bot's
+    # auto-commit would otherwise land before
+    # CreateGithubRepoFromTemplate has a chance to delete this
+    # workflow, and the chain verifier would flag it as a direct
+    # push and pause the preview. Human dep bumps on the template
+    # repos themselves are pushes to an existing main, so
+    # created==false and the job runs.
+    if: ${{ github.event.created != true }}
 
     steps:
       - name: Checkout
