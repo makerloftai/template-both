@@ -4,6 +4,7 @@ use App\Support\MakerLoftErrorReporter;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -28,11 +29,25 @@ return Application::configure(basePath: dirname(__DIR__))
         });
     })
     ->withExceptions(function (Exceptions $exceptions): void {
+        // Laravel's default internalDontReport list includes HttpException,
+        // so abort(500) and other 5xx HTTP aborts never fire any custom
+        // report callback. Removing it restores reachability; we then
+        // filter inside the callback so 4xx (404 / 401 / 403 / …) stay
+        // silent (return false halts the report chain, including default
+        // logging) while 5xx flow through to the MakerLoft dashboard
+        // and the default logger (so the orchestrator's docker-logs tail
+        // can also pick them up).
+        $exceptions->stopIgnoring([HttpException::class]);
+
         // Forward every unhandled exception to the MakerLoft dashboard's
         // error-ingest webhook. No-ops silently when the env vars are
         // unset (e.g. local dev or a fork deployed outside MakerLoft's
         // orchestration), so this is safe to ship in every starter.
-        $exceptions->report(function (Throwable $e): void {
+        $exceptions->report(function (Throwable $e) {
+            if ($e instanceof HttpException && $e->getStatusCode() < 500) {
+                return false;
+            }
+
             MakerLoftErrorReporter::report($e);
         });
     })->create();
